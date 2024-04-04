@@ -11,7 +11,7 @@
         background-color: #f5f5f5;
     }
     .container {
-        max-width: 500px;
+        max-width: 600px;
         margin: 0 auto;
     }
     h2 {
@@ -23,7 +23,7 @@
         margin-bottom: 5px;
         color: #555;
     }
-    input {
+    input[type="text"] {
         width: calc(100% - 16px);
         padding: 8px;
         margin-bottom: 10px;
@@ -31,7 +31,7 @@
         border-radius: 4px;
         transition: border-color 0.3s ease;
     }
-    input:focus {
+    input[type="text"]:focus {
         outline: none;
         border-color: #007bff;
     }
@@ -64,6 +64,14 @@
         color: #0056b3;
         text-decoration: underline;
     }
+    .game-artwork {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .game-artwork img {
+        max-width: 100%;
+        height: auto;
+    }
 </style>
 </head>
 <body>
@@ -83,10 +91,17 @@
 </div>
 
 <div>
+    <label for="region">Enter Region (EN, FR, DE, ES, IT, NL):</label>
+    <input type="text" id="region" name="region" maxlength="2">
+</div>
+
+<div>
     <button onclick="generateLink()">Generate Link</button>
 </div>
 
 <div id="output"></div>
+
+<div class="game-artwork" id="gameArtwork"></div>
 
 <p><strong>Privacy Policy:</strong> This website does <strong>not</strong> store or use your RiiTag key for any purpose other than constructing the URL. If you do not trust this website, please refrain from using it for this step. Your trust and privacy are important to us. Please note that this tool is not officially affiliated with RiiTag and is provided solely as a reverse-engineered utility for RiiTag users. The source code for this website is available on <a href="https://github.com/HomebrewHeroes/riitagedit" target="_blank">GitHub</a>.</p>
 
@@ -96,10 +111,25 @@
 function generateLink() {
     var key = document.getElementById("key").value;
     var gameId = document.getElementById("gameId").value;
+    var region = document.getElementById("region").value.toUpperCase();
+
+    // Check if the entered region is acceptable
+    var acceptableRegions = ["EN", "FR", "DE", "ES", "IT", "NL"];
+    if (!acceptableRegions.includes(region)) {
+        alert("Please enter a valid region: EN, FR, DE, ES, IT, NL");
+        return;
+    }
 
     var link = "https://tag.rc24.xyz/wii?game=" + gameId + "&key=" + key;
 
     document.getElementById("output").innerHTML = "<a href='" + link + "'>" + link + "</a>";
+
+    // Display game artwork
+    var gameArtworkDiv = document.getElementById("gameArtwork");
+    gameArtworkDiv.innerHTML = "<p>Game Preview on RiiTag:</p>";
+    var img = document.createElement("img");
+    img.src = "https://art.gametdb.com/wii/cover3D/" + region + "/" + gameId + ".png";
+    gameArtworkDiv.appendChild(img);
 }
 </script>
 
